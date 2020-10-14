@@ -1,0 +1,90 @@
+<style>
+    textarea {
+       resize: none;
+    }
+</style>
+
+<div class="container">
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="descricao">Descrição</label>
+                <textarea type="text" class="form-control" id="descricao" formControlName="descricao" rows="10"></textarea>
+            </div>
+        </div>
+    
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="data">Data</label>
+                <input type="date" class="form-control" id="data" formControlName="data">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="numeroAto">Número do Ato</label>
+                <input type="text" class="form-control" id="numeroAto" formControlName="numeroAto">
+            </div>
+        </div>
+    
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="ano">Ano</label>
+                <input type="text" class="form-control" id="ano" formControlName="ano">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="arquivo">Arquivo</label>
+                <input type="text" class="form-control" id="arquivo" formControlName="arquivo">
+            </div>
+        </div>
+    
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="tipoLegislacao">Tipo Legislação</label>
+                <select id="tipoLegislacao" class="form-control" formControlName="tipoLegislacao" >
+                    <option selected value="">Selecione uma opção</option>
+                    <option *ngFor="let tipoLegislacao of tipoLegislacaoList" [value]="tipoLegislacao.value">{{tipoLegislacao.label}}</option>
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="categoriaLegislacao">Categoria Legislação</label>
+                <select id="categoriaLegislacao" class="form-control" formControlName="categoriaLegislacao">
+                    <option selected value="">Selecione uma opção</option>
+                    <option *ngFor="let categoria of categorias" [value]="categoria.value">{{categoria.label}}</option>
+                </select>
+            </div>
+        </div>
+    
+        <div class="form-row mt-3">
+            <div class="form-group col-md-12">
+                <button class="btn btn-success btn-md btn-block waves-effect text-center m-b-20">Enviar</button>
+            </div>
+        </div>
+    
+    </form>
+
+    <p-table [value]="legislacaoList">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>id</th>
+                <th>descrição</th>
+                <th>Ações</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-legislacao>
+            <tr>
+                <td>{{legislacao.id}}</td>
+                <td>{{legislacao.descricao}}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="">editar</a>
+                        </li>
+                        <li>
+                            <a href="">excluir</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
