@@ -1,0 +1,43 @@
+<h1>talkey</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <label for="descricao" class="control-label">Descrição</label>
+    <input type="text" pInputText formControlName="descricao" name="descricao"/>
+    <br><br>
+
+    <label for="data" class="control-label">Data</label>
+    <input type="text" pInputText formControlName="data" name="data"/>
+    <br><br>
+
+    <label for="numeroAto" class="control-label">Numero Ato</label>
+    <input type="text" pInputText formControlName="numeroAto" name="numeroAto"/>
+    <br><br>
+
+    <label for="ano" class="control-label">Ano</label>
+    <input type="text" pInputText formControlName="ano" name="ano"/>
+    <br><br>
+
+    <label for="arquivo" class="control-label">Arquivo</label>
+    <input type="text" pInputText formControlName="arquivo" name="arquivo"/>
+    <br><br>
+
+    <label for="categoria" class="control-label">Categoria</label>
+    <p-dropdown [options]="categorias" formControlName="categoriaLegislacao" name="categoria"></p-dropdown>
+    <br><br>
+
+    <label for="tipoLegislacao" class="control-label">Tipo Legislação</label>
+    <p-dropdown [options]="tipoLegislacaoList" formControlName="tipoLegislacao" name="tipoLegislacao"></p-dropdown>
+    <br><br>
+
+    <button class="btn btn-success btn-md btn-block waves-effect text-center m-b-20">Enviar</button>
+
+</form>
+<!-- {
+    "data": "11/09/1989",
+    "descricao": "olá galerinha, blz? editado",
+    "numeroAto": 123456,
+    "ano": 2002,
+    "tipoLegislacao": 1,
+    "arquivo": "bataaata",
+    "categoriaLegislacao": 21
+} -->
