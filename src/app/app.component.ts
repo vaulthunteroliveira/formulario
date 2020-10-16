@@ -52,6 +52,7 @@ export class AppComponent implements OnInit {
     this.service.save(this.form.value).subscribe(res => {
       this.carregaCombos();
       this.form.reset()
+      this.messageService.add({severity:'success', summary: 'Successful', detail: 'Product Deleted', life: 3000});
     },
     erro => console.log(erro) );
   }
