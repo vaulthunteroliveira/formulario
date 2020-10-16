@@ -19,14 +19,19 @@ export class AppService {
     return this.http.get<any[]>(`${API_CONFIG.baseUrl}/tipoLegislacao`)
   }
 
-  save(data: any) : void
+  save(data: any) : Observable<any[]>
   {
-    this.http.post(`${API_CONFIG.baseUrl}/legislacao`,data)
-      .subscribe(e => console.log(e));
+    return this.http.post<any[]>(`${API_CONFIG.baseUrl}/legislacao`,data)
   }
 
-  findAllLegislacao(): Observable<any[]>{
+  findAllLegislacao(): Observable<any[]>
+  {
     return this.http.get<any[]>(`${API_CONFIG.baseUrl}/legislacao`)
   }
 
+  delete(id: number): Observable<any> 
+  {
+    const url = `${API_CONFIG.baseUrl}/legislacao/${id}`;
+    return this.http.delete<any>(url)
+  }
 }
