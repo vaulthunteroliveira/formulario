@@ -1,126 +1,177 @@
 <style>
     textarea {
-       resize: none;
+        resize: none;
     }
 
-    footer{
-        position: fixed;
-        bottom: 0;
+    footer {
         background-color: #d2d2d2;
         height: 100px;
     }
 
-    th, td {
+    th,
+    td {
         width: 50px;
     }
 
+    .enviarCancelarButtons {
+        width: 150px;
+    }
 
+    header{
+        height: 100px;
+        background-color: #0275d8;
+        margin-bottom: 20px;
+    }
 </style>
 
 <p-message></p-message>
+<header></header>
 <div class="container">
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <!-- <div class="form-row">
-            <div class="form-group col-sm-1">
-                <label for="id" class="col-form-label col-form-label-sm">Código</label>
-                <input type="text" class="form-control form-control-sm" id="id" formControlName="id">
+    <div class="card">
+        <div class="card-body">
+            <div class="card-title">
+                {{ legislacaoSelected ? 'Editar Legislação' : 'Cadastrar Legislação' }}
             </div>
-        </div> -->
-        
-        <div class="form-row">
-            <div class="form-group col-sm-12">
-                <label for="descricao col-form-label col-form-label-sm">Descrição</label>
-                <textarea type="text" class="form-control form-control-sm" id="descricao" formControlName="descricao" rows="5"></textarea>
+            <div class="card-text">
+                <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                    <div class="form-row" *ngIf="legislacaoSelected">
+                        <div class="form-group col-sm-1">
+                            <label for="id" class="col-form-label col-form-label-sm">Código</label>
+                            <input type="text" class="form-control form-control-sm" id="id"
+                                value="{{legislacaoSelected.id}}">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-sm-12">
+                            <label for="descricao col-form-label col-form-label-sm">Descrição</label>
+                            <textarea type="text" class="form-control form-control-sm" id="descricao"
+                                formControlName="descricao" rows="5"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-sm-4">
+                            <label for="data col-form-label col-form-label-sm" value="">Data</label>
+                            <input type="date" class="form-control form-control-sm" id="data" formControlName="data">
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label for="numeroAto col-form-label col-form-label-sm">Número do Ato</label>
+                            <input type="text" class="form-control form-control-sm" id="numeroAto"
+                                formControlName="numeroAto">
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label for="ano col-form-label col-form-label-sm">Ano</label>
+                            <input type="text" class="form-control form-control-sm" id="ano" formControlName="ano">
+                        </div>
+
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-sm-6">
+                            <label for="tipoLegislacao col-form-label col-form-label-sm">Tipo Legislação</label>
+                            <select id="tipoLegislacao" class="form-control form-control-sm"
+                                formControlName="tipoLegislacao">
+                                <option selected value="">Selecione uma opção</option>
+                                <option *ngFor="let tipoLegislacao of tipoLegislacaoList"
+                                    [value]="tipoLegislacao.value">
+                                    {{tipoLegislacao.label}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="categoriaLegislacao col-form-label col-form-label-sm">Categoria
+                                Legislação</label>
+                            <select id="categoriaLegislacao" class="form-control form-control-sm"
+                                formControlName="categoriaLegislacao" (change)="printaValor($event)">
+                                <option selected value="">Selecione uma opção</option>
+                                <option *ngFor="let categoria of categorias" [value]="categoria.value">
+                                    {{categoria.label}}</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="flagAtivo" formControlName="flagAtivo">
+                        <label class="form-check-label" for="flagAtivo">
+                            Ativo?
+                        </label>
+                    </div>
+                    <br>
+                    <div class="form-row">
+                        <div class="form-group col-sm-12">
+                            <button class="btn btn-success btn-sm  waves-effect text-center enviarCancelarButtons">
+                                {{ legislacaoSelected ? 'Editar' : 'Enviar' }}
+                            </button>
+                            &nbsp;
+                            <button
+                                class="btn btn-secondary btn-sm  waves-effect text-center enviarCancelarButtons">Cancelar</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-
-        <div class="form-row">
-            <div class="form-group col-sm-4">
-                <label for="data col-form-label col-form-label-sm">Data</label>
-                <input type="date" class="form-control form-control-sm" id="data" formControlName="data">
-            </div>
-            <div class="form-group col-sm-4">
-                <label for="numeroAto col-form-label col-form-label-sm">Número do Ato</label>
-                <input type="text" class="form-control form-control-sm" id="numeroAto" formControlName="numeroAto">
-            </div>
-            <div class="form-group col-sm-4">
-                <label for="ano col-form-label col-form-label-sm">Ano</label>
-                <input type="text" class="form-control form-control-sm" id="ano" formControlName="ano">
-            </div>
-            
-        </div>
-
-        <div class="form-row">
-            <div class="form-group col-sm-6">
-                <label for="tipoLegislacao col-form-label col-form-label-sm">Tipo Legislação</label>
-                <select id="tipoLegislacao" class="form-control form-control-sm" formControlName="tipoLegislacao" >
-                    <option selected value="">Selecione uma opção</option>
-                    <option *ngFor="let tipoLegislacao of tipoLegislacaoList" [value]="tipoLegislacao.value">{{tipoLegislacao.label}}</option>
-                </select>
-            </div>
-            <div class="form-group col-sm-6">
-                <label for="categoriaLegislacao col-form-label col-form-label-sm">Categoria Legislação</label>
-                <select id="categoriaLegislacao" class="form-control form-control-sm" formControlName="categoriaLegislacao">
-                    <option selected value="">Selecione uma opção</option>
-                    <option *ngFor="let categoria of categorias" [value]="categoria.value">{{categoria.label}}</option>
-                </select>
-            </div>
-            
-        </div>
-
-        <div class="form-row">
-            <div class="form-group col-sm-4">
-                <div class="form-check">
-                    <input class="form-check-input form-control-sm" type="checkbox" id="flagAtivo" formControlName="flagAtivo" checked>
-                    <label class="form-check-label col-form-label col-form-label-sm" for="flagAtivo">
-                          Ativo?
-                    </label>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group col-sm-12">
-                <button class="btn btn-success btn-sm btn-block waves-effect text-center mb-5">Enviar</button>
-            </div>
-        </div>
-    </form>
-
-    <p-table [value]="legislacaoList">
-        <ng-template pTemplate="header">
-            <tr>
-                <th>Código</th>
-                <th style="width: 200px">Descrição</th>
-                <th>Tipo legislação</th>
-                <th>Ano</th>
-                <th>Ações</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-legislacao>
-            <tr>
-                <td>{{legislacao.id}}</td>
-                <td>{{this.truncate(legislacao.descricao, 70)}}</td>
-                <td>{{legislacao.tipoLegislacao.sigla}}</td>
-                <td>{{legislacao.ano}}</td>
-                <td>
-                    <button class="btn btn-info btn-sm" >
-                        <span class="p-button-icon pi pi-pencil"></span>
-                    </button>
-                    &nbsp;
-                    <button class="btn btn-danger btn-sm" (click)="delete(legislacao)">
-                        <span class="p-button-icon pi pi-trash"></span>
-                    </button>
-                    
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
+    </div>
     <br>
+    <div class="card">
+        <div class="card-body">
+            <div class="card-title">
+                Enviar Arquivo
+            </div>
+            <div class="card-text">
+                <input type="file" name="" id="">
+            </div>
+        </div>
+    </div>
     <br>
-    <footer>
-    
-    
-    </footer>
+    <div class="card">
+        <div class="card-body">
+            <div class="card-title">
+                Lista de legislações
+            </div>
+            <div class="card-text">
+                <p-table [value]="legislacaoList">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 10%;">Código</th>
+                            <th style="width: 50%">Descrição</th>
+                            <th style="width: 10%">Tipo legislação</th>
+                            <th style="width: 10%">Ano</th>
+                            <th style="width: 20%">Ações</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-legislacao>
+                        <tr>
+                            <td>{{legislacao.id}}</td>
+                            <td>{{this.truncate(legislacao.descricao, 50)}}</td>
+                            <td>{{legislacao.tipoLegislacao.sigla}}</td>
+                            <td>{{legislacao.ano}}</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm" (click)="edit(legislacao)">
+                                    <span class="p-button-icon pi pi-pencil"></span>
+                                </button>
+                                &nbsp;
+                                <button class="btn btn-danger btn-sm" (click)="delete(legislacao)">
+                                    <span class="p-button-icon pi pi-trash"></span>
+                                </button>
+                                &nbsp;
+                                <button class="btn btn-success btn-sm">
+                                    <span class="p-button-icon pi pi-upload"></span>
+                                </button>
+                                &nbsp;
+                                <button class="btn btn-info btn-sm">
+                                    <span class="p-button-icon pi pi-file-pdf" style="color: #fff;"></span>
+                                </button>
+            
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+    <br>
 </div>
+<footer>
+</footer>
 <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
-

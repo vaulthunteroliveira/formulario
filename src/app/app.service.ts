@@ -24,6 +24,11 @@ export class AppService {
     return this.http.post<any[]>(`${API_CONFIG.baseUrl}/legislacao`,data)
   }
 
+  update(data: any, id: number) : Observable<any[]>
+  {
+    return this.http.put<any[]>(`${API_CONFIG.baseUrl}/legislacao/${id}`,data)
+  }
+
   findAllLegislacao(): Observable<any[]>
   {
     return this.http.get<any[]>(`${API_CONFIG.baseUrl}/legislacao`)

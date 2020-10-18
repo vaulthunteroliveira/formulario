@@ -19,6 +19,10 @@ export class AppComponent implements OnInit {
 
   name = "formulario";
 
+  legislacaoSelected: any;
+
+  legislacaoSelectedUpload: any;
+
   constructor(
     private formBuilder: FormBuilder,
     public service: AppService,
@@ -29,31 +33,31 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.form = this.formBuilder.group({
-      data: [null, [Validators.required]],
-      descricao: [null, [Validators.required]],
-      numeroAto: [null, [Validators.required]],
-      ano: [null, [Validators.required]],
-      tipoLegislacao: [null, [Validators.required]],
-      categoriaLegislacao: [null, [Validators.required]],
-      flagAtivo: [null],
-    });
+    this.loadForm();
   }
 
   onSubmit(): void {
     if (!this.form.valid) {
-      // this.showModal(
-      //   "Algumas informações não foram aceitas, favor corrija-as para continuar!"
-      // );
       alert("Allahu Akbar!! Allahu Akbar!!");
       return;
     }
 
-    this.service.save(this.form.value).subscribe(res => {
-      this.carregaCombos();
-      this.form.reset()
-    },
-    erro => console.log(erro) );
+    if (this.legislacaoSelected) {
+      this.service.update(this.form.value, this.legislacaoSelected.id).subscribe(res => {
+        this.carregaCombos();
+        this.form.reset()
+        this.legislacaoSelected = null;
+      },
+        erro => console.log(erro));
+    } else {
+      this.service.save(this.form.value).subscribe(res => {
+        this.carregaCombos();
+        this.form.reset()
+      },
+        erro => console.log(erro));
+    }
+
+
   }
 
   carregaCombos() {
@@ -85,19 +89,56 @@ export class AppComponent implements OnInit {
           (e) => {
             this.carregaCombos();
             legislacao = {};
-            this.messageService.add({severity:'success', summary: 'Successful', detail: 'Product Deleted', life: 3000});
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
           },
           (erro) => console.log(erro)
         );
-        //
-        // this.products = this.products.filter(val => val.id !== product.id);
-        // 
-        // 
       },
     });
   }
 
+  edit(legislacao: any): void {
+    this.form.reset()
+
+    this.legislacaoSelected = null
+
+    this.legislacaoSelected = legislacao;
+
+    this.form.patchValue(
+      {
+        'data': this.legislacaoSelected.data.substr(0, 10),
+        'descricao': this.legislacaoSelected.descricao,
+        'numeroAto': this.legislacaoSelected.numeroAto,
+        'ano': this.legislacaoSelected.ano,
+        'flagAtivo': this.legislacaoSelected.flagAtivo,
+        'categoriaLegislacao': this.legislacaoSelected.categoriaLegislacaoList[0].id,
+        'tipoLegislacao': this.legislacaoSelected.tipoLegislacao.id
+      }
+    )
+  }
+
+  printaValor(event) {
+    console.log(event.target.value)
+  }
+
   truncate(str, n) {
     return str.length > n ? `${str.substr(0, n - 1)}...` : str;
+  }
+
+  loadForm() {
+    this.form = this.formBuilder.group({
+      data: [null, [Validators.required]],
+      descricao: [null, [Validators.required]],
+      numeroAto: [null, [Validators.required]],
+      ano: [null, [Validators.required]],
+      tipoLegislacao: [null, [Validators.required]],
+      categoriaLegislacao: [null, [Validators.required]],
+      flagAtivo: [null],
+    });
+  }
+
+  limparFormulario(event) {
+    event.preventdefault();
+    this.form.reset();
   }
 }

@@ -27,6 +27,9 @@ import {ConfirmationService} from 'primeng/api';
 import {MessagesModule} from 'primeng/messages';
 import {MessageModule} from 'primeng/message';
 
+import {CheckboxModule} from 'primeng/checkbox';
+
+
 
 
 @NgModule({
@@ -48,7 +51,8 @@ import {MessageModule} from 'primeng/message';
     FontAwesomeModule,
     ConfirmDialogModule,
     MessagesModule,
-    MessageModule
+    MessageModule,
+    CheckboxModule
   ],
   providers: [
     AppService,
